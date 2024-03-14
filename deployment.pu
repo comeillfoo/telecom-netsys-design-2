@@ -1,0 +1,23 @@
+@startuml
+
+node Kernel_Space {
+    [Winsock Kernel] as WSK
+    [Windows Filtering Platform] as WFP
+    [Protocol Driver] as ProtoDriver
+    [Miniport Driver] as MiniportDriver
+}
+
+ProtoDriver -(0- WFP
+ProtoDriver -(0- WSK : "Transport Device Interface (TDI)"
+MiniportDriver -(0- ProtoDriver : NDIS
+
+node User_Space {
+    [Windows Sockets 2] as Winsock2
+}
+
+node Windows_Software_Development_Kit {
+    rectangle "<<library>>\nWs2_32.lib" as ws2_32_lib
+} 
+
+ws2_32_lib -[dashed]-> Winsock2 : <<manifests>>
+@enduml
