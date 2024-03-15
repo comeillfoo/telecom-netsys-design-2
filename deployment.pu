@@ -1,6 +1,6 @@
 @startuml
 
-node Kernel_Space {
+node "Kernel Space" {
     [Winsock Kernel] as WSK
     [Windows Filtering Platform] as WFP
     [Protocol Driver] as ProtoDriver
@@ -8,16 +8,42 @@ node Kernel_Space {
 }
 
 ProtoDriver -(0- WFP
-ProtoDriver -(0- WSK : "Transport Device Interface (TDI)"
+ProtoDriver -(0)- WSK
 MiniportDriver -(0- ProtoDriver : NDIS
 
-node User_Space {
+node "User Space" {
     [Windows Sockets 2] as Winsock2
+    [Wireshark] as wireshark_c
+    [ping] as ping_c
+    [tracert] as tracert_c
+    [Google Chrome] as chrome_c
+    [WinPcap] as winpcap_c
 }
 
-node Windows_Software_Development_Kit {
-    rectangle "<<library>>\nWs2_32.lib" as ws2_32_lib
-} 
+ProtoDriver -(0- Winsock2 : TDI
+WFP -(0- winpcap_c
+
+node "C:\" {
+    artifact "<<executable>>\nping.exe" as ping
+    artifact "<<executable>>\ntracert.exe" as tracert
+    artifact "<<executable>>\nWireshark.exe" as wireshark
+    artifact "<<executable>>\nchrome.exe" as chrome
+    artifact "<<library>>\nWpcap.dll" as winpcap
+
+    node "Windows SDK" {
+        artifact "<<library>>\nWs2_32.lib" as ws2_32_lib
+    } 
+}
 
 ws2_32_lib -[dashed]-> Winsock2 : <<manifests>>
+
+ping -[dashed]-> ping_c : <<manifests>>
+tracert -[dashed]-> tracert_c : <<manifests>>
+wireshark -[dashed]-> wireshark_c : <<manifests>>
+chrome -[dashed]-> chrome_c : <<manifests>>
+
+Winsock2 -(0- ping_c
+Winsock2 -(0- tracert_c
+winpcap_c -(0- wireshark_c
+Winsock2 -(0- chrome_c
 @enduml
