@@ -1,0 +1,84 @@
+Android System
+AudioMirroring
+AutoHotspot
+BBCAgent
+ClipboardSaveService
+com.android.localtransport
+com.android.providers.media
+com.android.wallpaperbackup
+com.samsung.android.biometrics,app.setting
+com.samsung.android.know.attestation
+com.samsung.android.smartswitchassistant
+com.sec.bcservice
+com.sec.epdg
+ConfigUpdater
+Configuration update
+DckTimeAsyncApplication
+DeviceKeystring
+DiagMonAgent
+Download Manager
+Downloads
+DQA
+DRParser Mode
+Dual Messenger
+Dynamic System Updates
+Emergency SOS
+Enterprise Sim Pin Service
+FacAtFunction
+FACM
+FactoryCamera
+FactoryTestProvider
+FilterProvider
+Fused Location
+Galaxy Themes Service
+Game Booster
+Game Optimizing Service
+Google Calendar Sync
+Google Location History
+Google Services Framework
+HdmApp
+HwModuleTest
+iaft
+IMS Service
+ImsLogger
+Input Devices
+Key Chain
+KeyCustomizationInfoBNR
+KnoxPushManager
+Launcher
+Locale Overlay Manager
+MTP Application
+MTP Host
+Perso
+RcsSettings
+Recommended apps
+RilNotifier
+Samsung Cloud Platform Manager
+Samsung Core Services
+Samsung Device Health Manager Service
+Samsung Keyboard
+Samsung setup wizard
+Samsung text-to-speech engine
+SamsungOdaService
+Sec Media Storage
+SecSoundPicker
+SecurityPolicy
+SecVideoEngineService
+Service mode
+Settings Storage
+SettingsBixby
+ShortcutBNR
+SilentLogging
+SKMSAgentService
+SmartFaceService
+SmartFPSAdjuster
+Software update
+Sticker Center
+SVC Agent
+Tethering
+TetheringAutomation
+Tools
+USBSettings
+Video Player
+Wallpaper and style
+WlanTest
