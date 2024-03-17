@@ -1,53 +1,46 @@
 @startuml
 node "<<device>> Smartphone" {
     node AOSP {
-        node "ext4" {
-            folder "<<folder>> /bin" as bin_f {
-                artifact "<<ELF>>\ntoybox" as toybox
-            }
-            folder "<<folder>> /system/bin" as system_bin_f {
-                artifact "<<ELF>>\napp_process" as zygote
-            }
-            artifact "<<DEX>>\nreddit.dex" as reddit
-            artifact "<<DEX>>\nchrome.dex" as chrome
-            artifact "<<DEX>>\nyoutube.dex" as youtube
-        }
-
         node "Linux Kernel" {
             [toybox] as toybox_c
+            [ping] as ping_c
             node "Zygote" as zygote_n {
-                node "Android Runtime" as art_n_t1 {
+                [system_server] as system_server_c
+                [Activity Manager] as activity_manager_c
+                node "Android Runtime" as art_n1 {
                     [reddit] as reddit_c
+                    [OkHttp] as http_lib1
                 }
-                node "Android Runtime" as art_n_t2 {
+                node "Android Runtime" as art_n2 {
                     [chrome] as chrome_c
+                    [OkHttp] as http_lib2
                 }
-                node "Android Runtime" as art_n_t3 {
+                node "Android Runtime" as art_n3 {
                     [youtube] as youtube_c
+                    [OkHttp] as http_lib3
                 }
+
             }
 
             [lo]
             [wlan]
 
             [syscalls]
-
-            [Activity Manager] as activity_manager_c
         }
     }
 }
 
-toybox -[dashed]-> toybox_c : <<manifests>>
-zygote -[dashed]-> zygote_n : <<manifests>>
-reddit -[dashed]-> reddit_c : <<manifests>>
-chrome -[dashed]-> chrome_c : <<manifests>>
-youtube -[dashed]-> youtube_c : <<manifests>>
+activity_manager_c -(0)- system_server_c : "Unix socket\n/dev/socket/zygote"
 
-activity_manager_c -- zygote_n : "Unix socket\n/dev/socket/zygote"
+toybox_c -(0)- syscalls
+ping_c -(0)- syscalls
+reddit_c -(0)- http_lib1
+chrome_c -(0)- http_lib2
+youtube_c -(0)- http_lib3
 
-reddit_c -(0)- syscalls : JNI
-chrome_c -(0)- syscalls : JNI
-youtube_c -(0)- syscalls : JNI
+http_lib1 -(0)- syscalls : JNI
+http_lib2 -(0)- syscalls : JNI
+http_lib3 -(0)- syscalls : JNI
 
 syscalls -(0)- lo
 syscalls -(0)- wlan

@@ -1,0 +1,25 @@
+@startuml
+actor Me as user
+participant "Launcher (One UI)" as launcher
+participant system_server
+participant Zygote as zygote
+participant Reddit as reddit
+participant OkHttp
+participant syscalls
+participant wlan
+
+user -> launcher : Tap Reddit icon
+launcher -> system_server : IPC: startActivity()
+system_server -> zygote : socket: fork() command
+zygote -> reddit : fork()
+reddit -> system_server : IPC: attachApplication
+system_server -> reddit : IPC: bindApplication
+loop until exit
+    reddit -> OkHttp : OkHttpClient.newCall(request).execute()
+    OkHttp -> syscalls : send()
+    syscalls -> wlan : ndo_start_xmit()
+    wlan -> syscalls : netif_rx()
+    syscalls -> OkHttp : recv()
+    OkHttp -> reddit : Response
+end
+@enduml
