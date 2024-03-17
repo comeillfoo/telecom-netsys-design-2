@@ -1,0 +1,55 @@
+@startuml
+node "<<device>> Smartphone" {
+    node AOSP {
+        node "ext4" {
+            folder "<<folder>> /bin" as bin_f {
+                artifact "<<ELF>>\ntoybox" as toybox
+            }
+            folder "<<folder>> /system/bin" as system_bin_f {
+                artifact "<<ELF>>\napp_process" as zygote
+            }
+            artifact "<<DEX>>\nreddit.dex" as reddit
+            artifact "<<DEX>>\nchrome.dex" as chrome
+            artifact "<<DEX>>\nyoutube.dex" as youtube
+        }
+
+        node "Linux Kernel" {
+            [toybox] as toybox_c
+            node "Zygote" as zygote_n {
+                node "Android Runtime" as art_n_t1 {
+                    [reddit] as reddit_c
+                }
+                node "Android Runtime" as art_n_t2 {
+                    [chrome] as chrome_c
+                }
+                node "Android Runtime" as art_n_t3 {
+                    [youtube] as youtube_c
+                }
+            }
+
+            [lo]
+            [wlan]
+
+            [syscalls]
+
+            [Activity Manager] as activity_manager_c
+        }
+    }
+}
+
+toybox -[dashed]-> toybox_c : <<manifests>>
+zygote -[dashed]-> zygote_n : <<manifests>>
+reddit -[dashed]-> reddit_c : <<manifests>>
+chrome -[dashed]-> chrome_c : <<manifests>>
+youtube -[dashed]-> youtube_c : <<manifests>>
+
+activity_manager_c -- zygote_n : "Unix socket\n/dev/socket/zygote"
+
+reddit_c -(0)- syscalls : JNI
+chrome_c -(0)- syscalls : JNI
+youtube_c -(0)- syscalls : JNI
+
+syscalls -(0)- lo
+syscalls -(0)- wlan
+
+@enduml
