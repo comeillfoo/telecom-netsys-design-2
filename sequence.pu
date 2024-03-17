@@ -1,0 +1,16 @@
+@startuml
+participant "Windows Sockets 2" as Winsock2
+ping --> Winsock2 : WSAStartup()
+ping --> Winsock2 : getaddrinfo()
+ping --> Winsock2 : getaddrinfo()
+ping --> Winsock2 : socket()
+ping --> Winsock2 : setsockopt()
+ping --> Winsock2 : bind()
+ping --> Winsock2 : WSACreateEvent()
+ping --> Winsock2 : WSARecvFrom()
+ping --> Winsock2 : sendto()
+ping --> Winsock2 : WSAGetOverlappedResult()
+ping --> Winsock2 : WSARecvFrom()
+ping --> Winsock2 : closesocket()
+ping --> Winsock2 : WSACleanup()
+@enduml
