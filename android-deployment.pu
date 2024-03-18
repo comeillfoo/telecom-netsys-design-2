@@ -1,5 +1,5 @@
 @startuml
-node "<<device>> Smartphone" {
+node "<<device>> Smartphone" as smartphone {
     node AOSP {
         node "Linux Kernel" {
             [toybox] as toybox_c
@@ -30,19 +30,23 @@ node "<<device>> Smartphone" {
     }
 }
 
-activity_manager_c -(0)- system_server_c : "Unix socket\n/dev/socket/zygote"
+activity_manager_c -- system_server_c : "Unix socket\n/dev/socket/zygote"
 
-toybox_c -(0)- syscalls
-ping_c -(0)- syscalls
-reddit_c -(0)- http_lib1
-chrome_c -(0)- http_lib2
-youtube_c -(0)- http_lib3
+toybox_c -(0- syscalls
+ping_c -(0- syscalls
+reddit_c -(0- http_lib1
+chrome_c -(0- http_lib2
+youtube_c -(0- http_lib3
 
-http_lib1 -(0)- syscalls : JNI
-http_lib2 -(0)- syscalls : JNI
-http_lib3 -(0)- syscalls : JNI
+http_lib1 -(0- syscalls : JNI
+http_lib2 -(0- syscalls : JNI
+http_lib3 -(0- syscalls : JNI
 
-syscalls -(0)- lo
-syscalls -(0)- wlan
+syscalls -(0- lo
+syscalls -(0- wlan
 
+node Router as router {
+}
+
+smartphone -- router : "<<protocol>>\nTCP/IP"
 @enduml
