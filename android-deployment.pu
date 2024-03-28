@@ -1,12 +1,9 @@
 @startuml
 node "<<device>> Smartphone" as smartphone {
     node AOSP {
-        node "Linux Kernel" {
-            [toybox] as toybox_c
+        node "User Space" {
             [ping] as ping_c
             node "Zygote" as zygote_n {
-                [system_server] as system_server_c
-                [Activity Manager] as activity_manager_c
                 node "Android Runtime" as art_n1 {
                     [reddit] as reddit_c
                     [OkHttp] as http_lib1
@@ -21,18 +18,18 @@ node "<<device>> Smartphone" as smartphone {
                 }
 
             }
-
-            [lo]
+        }
+        node "Linux Kernel" {
             [wlan]
+            [ipv4]
+            [tcp]
 
             [syscalls]
         }
     }
+    [NIC on SOC] as nic_c
 }
 
-activity_manager_c -- system_server_c : "Unix socket\n/dev/socket/zygote"
-
-toybox_c -(0- syscalls
 ping_c -(0- syscalls
 reddit_c -(0- http_lib1
 chrome_c -(0- http_lib2
@@ -42,11 +39,21 @@ http_lib1 -(0- syscalls : JNI
 http_lib2 -(0- syscalls : JNI
 http_lib3 -(0- syscalls : JNI
 
-syscalls -(0- lo
-syscalls -(0- wlan
+syscalls -(0- tcp
+tcp -(0- ipv4
+ipv4 -(0- wlan
+wlan -(0- nic_c
 
 node Router as router {
+  [NIC]
+  [L2 part] as L2
+  [L3 part] as L3
 }
 
-smartphone -- router : "<<protocol>>\nTCP/IP"
+L3 -(0- L2
+L2 -(0- NIC
+
+nic_c - NIC : PHY
+wlan - L2 : MAC
+ipv4 - L3 : IPv4
 @enduml
